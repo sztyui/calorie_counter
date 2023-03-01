@@ -18,8 +18,8 @@ const getFoodNames = async (searchstring) => {
     }
     console.log(options)
     await axios.request(options)
-         .then(res=>console.log(result = res.data))
-         .catch(err=>console.log(err))
+    .then(res=>console.log(result = res.data))
+    .catch(err=>console.log(err))
     return result
 }
 
@@ -71,104 +71,91 @@ export default {
 </script>
 <template>
     <p class="h3 p-2">Új étel felvétele</p>
-
+    
     <div class="container">
-
+        
         <div class="row">
             <div class="col-9">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text border-top" id="inputGroup-sizing-lg">Név</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputName" @keyup="textSearch($event)" placeholder="Összetevő">
+                
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Név</span>
+                    <input type="text" class="form-control" placeholder="Összetevő" aria-label="Összetevő" aria-describedby="addon-wrapping" v-model="inputName" @keyup="textSearch($event)" >
                 </div>
+                
             </div>
             <div class="col-3">
-
-                <!-- Example single danger button -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        Action
-                    </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                </ul>
-                </div>
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Találatok webről
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Action</a></li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li>
+  </ul>
+</div>
 
             </div>
         </div>
+
         <div class="row">
             <div class="col">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg">Fehérje</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputProtein" placeholder="0 gramm">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg">Szénhidrát</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputCarb" placeholder="0 gramm">
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg">Zsír</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputFat" placeholder="0 gramm">
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg">Kalória</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputCalorie" placeholder="0 gramm">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Fehérje</span>
+                    <input type="text" class="form-control" aria-label="Fehérje" aria-describedby="addon-wrapping" v-model="inputProtein" placeholder="0 gramm" >
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg">Mennyiség</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputQuantity" placeholder="100 gramm">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Szénhidrát</span>
+                    <input type="text" class="form-control" aria-label="Szénhidrát" aria-describedby="addon-wrapping" v-model="inputCarb" placeholder="0 gramm" >
                 </div>
             </div>
         </div>
         
         <div class="row">
+            <div class="col">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Zsír</span>
+                    <input type="text" class="form-control" aria-label="Zsír" aria-describedby="addon-wrapping" v-model="inputFat" placeholder="0 gramm" >
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Kalória</span>
+                    <input type="text" class="form-control" aria-label="Kalória" aria-describedby="addon-wrapping" v-model="inputCalorie" placeholder="0 Kcal" >
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Mennyiség</span>
+                    <input type="text" class="form-control" aria-label="Mennyiség" aria-describedby="addon-wrapping" v-model="inputQuantity" placeholder="100 gramm">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
             <div class="col-9 float-left">
                 <button type="button" class="btn btn-primary btn-lg" @click="$event => addItem($event)">Hozzáadaás a listához</button>
             </div>
             <div class="col-3 float-right">
                 <button type="button" class="btn btn-success btn-lg" @click="$event => excelExport($event)">Excel export</button>
             </div>
-
         </div>
     </div>
 </template>
 
 <style scoped>
-    .row {
-        margin-top: 5px;
-    }
+.row {
+    margin-top: 5px;
+}
 </style>
