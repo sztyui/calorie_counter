@@ -85,9 +85,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.custom-container {
-  padding: 0 2em;
-}
-</style>

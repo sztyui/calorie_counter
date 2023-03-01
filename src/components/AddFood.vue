@@ -74,7 +74,7 @@ export default {
     
     <div class="container">
         
-        <div class="row">
+        <div class="row mt-2">
             <div class="col-9">
                 
                 <div class="input-group flex-nowrap">
@@ -84,21 +84,20 @@ export default {
                 
             </div>
             <div class="col-3">
-<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Találatok webről
-  </button>
-  <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#">Action</a></li>
-    <li><a class="dropdown-item" href="#">Another action</a></li>
-    <li><a class="dropdown-item" href="#">Something else here</a></li>
-  </ul>
-</div>
-
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Találatok webről
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mt-2">
             <div class="col">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">Fehérje</span>
@@ -107,7 +106,7 @@ export default {
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mt-2">
             <div class="col">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">Szénhidrát</span>
@@ -116,7 +115,7 @@ export default {
             </div>
         </div>
         
-        <div class="row">
+        <div class="row mt-2">
             <div class="col">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">Zsír</span>
@@ -125,7 +124,7 @@ export default {
             </div>
         </div>
         
-        <div class="row">
+        <div class="row mt-2">
             <div class="col">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">Kalória</span>
@@ -134,7 +133,7 @@ export default {
             </div>
         </div>
         
-        <div class="row">
+        <div class="row mt-2">
             <div class="col">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">Mennyiség</span>
@@ -153,9 +152,3 @@ export default {
         </div>
     </div>
 </template>
-
-<style scoped>
-.row {
-    margin-top: 5px;
-}
-</style>

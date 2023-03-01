@@ -29,7 +29,7 @@ export default {
                     <td>{{item['carb']}}</td>
                     <td>{{item['fat']}}</td>
                     <td>{{item['calorie']}}</td>
-                    <td><input type="number" :value="item['quantity']" @change="$event => changeQuantity(index, $event)"></td>
+                    <td><input type="number" class="form-control-sm" :value="item['quantity']" @change="$event => changeQuantity(index, $event)"></td>
                     <td>{{ ((item['protein'] / 100) * item['quantity']).toFixed(2) }}</td>
                     <td>{{ ((item['carb'] / 100) * item['quantity']).toFixed(2) }}</td>
                     <td>{{ ((item['fat'] / 100) * item['quantity']).toFixed(2) }}</td>
@@ -43,10 +43,3 @@ export default {
             </tbody>
         </table>
 </template>
-
-<style scoped>
-table {
-    border-collapse: separate;
-    border-spacing: 2px;
-}
-</style>
