@@ -14,6 +14,6 @@ export default defineConfig({
     }
   },
   base: process.env.NODE_ENV === 'production'
-  ? '/hello-world/'
+  ? '/calorie_webapp/'
   : '/',
 })
