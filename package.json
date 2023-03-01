@@ -3,19 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "homepage": ".",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
-    "gh-pages-deploy": "node scripts/gh-pages-deploy.js"
+    "gh-deploy": "node scripts/gh-pages-deploy.js"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.6",
     "axios": "^1.3.4",
     "bootstrap-vue": "^2.23.1",
-    "vue": "^3.2.47"
+    "vue": "^3.2.47",
+    "execa": "latest"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
