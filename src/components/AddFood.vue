@@ -45,7 +45,8 @@ export default {
             inputQuantity: "", 
             cookForDays: undefined,
             timer: undefined,
-            querryResult: []
+            querryResult: [],
+            summaryTimer: undefined,
         }
     },
     methods: {
@@ -103,8 +104,17 @@ export default {
             this.$emit("export-excel")
         },
         countSummary() {
-            this.cookForDays ? 
-                this.$emit('count-summary', this.cookForDays) : document.getElementById('numberOfDaysInput').focus();
+            try {
+                parseInt(this.cookForDays)
+                clearTimeout(this.summaryTimer)
+                this.summaryTimer = setTimeout(() => {
+                    this.cookForDays ? 
+                        this.$emit('count-summary', this.cookForDays) : document.getElementById('numberOfDaysInput').focus();    
+                }, 1000);   
+            } catch(err) {
+                console.log(err)
+                document.getElementById('numberOfDaysInput').focus();
+            }
         },
         chooseFood(index) {
            let details = handleResult(this.querryResult[index])
@@ -212,7 +222,7 @@ export default {
             <div class="col-10">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">Hány napra főznél?</span>
-                    <input id="numberOfDaysInput" type="text" class="form-control" aria-label="Mennyiség" aria-describedby="addon-wrapping" v-model="cookForDays" placeholder="5 nap">
+                    <input id="numberOfDaysInput" type="text" class="form-control" aria-label="Mennyiség" aria-describedby="addon-wrapping" v-model="cookForDays" placeholder="5 nap" @keyup="$event => countSummary($event)">
                 </div>
             </div>
             <div class="col-2 text-end">
