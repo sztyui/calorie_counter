@@ -81,7 +81,7 @@ export default {
     <p class="h3 p-2">Új étel felvétele</p>
     
     <div class="container">
-        
+
         <div class="row mt-2">
             <div class="col-10">
                 
