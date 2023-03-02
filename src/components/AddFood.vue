@@ -104,9 +104,7 @@ export default {
                 this.$emit('count-summary', this.cookForDays) : document.getElementById('numberOfDaysInput').focus();
         },
         chooseFood(index) {
-           console.log(`choosing food: ${index}: ${this.querryResult[index]}`)
            let details = handleResult(this.querryResult[index])
-           console.log(details)
            this.inputName = details.name
            this.inputCalorie = details.calorie[0].amount
            this.inputProtein = details.protein[0].amount
