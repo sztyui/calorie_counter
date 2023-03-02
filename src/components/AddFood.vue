@@ -11,11 +11,11 @@ const getFoodNames = async (searchstring) => {
         headers: {
             "Content-Type": "application/json"
         },
-        data: {
-            query: searchstring
-        },
+        data: JSON.stringify({
+            query: "vibrátoros pörgő kutyaszar"
+            // query: searchstring
+        }),
     }
-    console.log(options)
     await axios.request(options)
     .then(res=>console.log(result = res.data))
     .catch(err=>console.log(err))
