@@ -20,13 +20,13 @@ export default {
             return this.items.reduce((a, b) => a + (parseFloat(b.calorie / 100) * b.quantity), 0);
         },
         calRemaining() {
-            return this.dailyKcal * 0.8 - this.sum_calorie;
+            return (this.dailyKcal * 0.8 - this.sum_calorie).toFixed(2);
         },
     },
     methods: {
         sumByProp(prop) {
             if(this.items.length == 0) return;
-            return this.items.reduce((a, b) => a + (parseFloat(b[prop])/100 * b['quantity']), 0);
+            return this.items.reduce((a, b) => a + (parseFloat(b[prop])/100 * b['quantity']), 0).toFixed(2);
         },
         propByBodyWeight(prop) {
             return (this.sumByProp(prop) / this.bodyWeight).toFixed(2);

@@ -67,9 +67,9 @@ export default {
             this.inputCalorie = null
         },
         textSearch() {
+            let button = document.getElementById("foundResults");
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
-                let button = document.getElementById("foundResults");
                 getFoodData(this.inputName)
                 .then(result => {
                     this.querryResult = result.data;
@@ -110,6 +110,14 @@ export default {
            this.inputProtein = details.protein[0].amount
            this.inputCarb = details.carb[0].amount
            this.inputFat = details.fat[0].amount
+        },
+        buttonClick() {
+            let button = document.getElementById("foundResults");
+            if (button.classList.contains('btn-success')) {
+                button.classList.remove('btn-success')
+            }
+            button.classList.remove('btn-secondary') 
+            button.classList.add('btn-secondary')
         }
     }
 }
@@ -131,7 +139,7 @@ export default {
             <div class="col-2 text-end">
                 
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="foundResults" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="foundResults" data-bs-toggle="dropdown" aria-expanded="false" @click="buttonClick">
                         Találatok
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
