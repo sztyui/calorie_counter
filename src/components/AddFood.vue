@@ -1,5 +1,4 @@
 <script>
-
 import axios from 'axios';
 const URL = 'https://api.nal.usda.gov/fdc/v1/foods/list'
 
@@ -18,16 +17,22 @@ const getFoodNames = async (searchstring) => {
     }
     console.log(options)
     await axios.request(options)
-         .then(res=>console.log(result = res.data))
-         .catch(err=>console.log(err))
+    .then(res=>console.log(result = res.data))
+    .catch(err=>console.log(err))
     return result
 }
 
 export default {
-    emits: ["set-item-event"],
+    emits: ["set-item-event", "count-summary"],
     data(){
         return {
-            inputName: "", inputProtein: "", inputCarb: "", inputFat: "", inputCalorie: "", inputQuantity: "",
+            inputName: "", 
+            inputProtein: "", 
+            inputCarb: "", 
+            inputFat: "", 
+            inputCalorie: "", 
+            inputQuantity: "", 
+            cookForDays: undefined,
             timer: undefined,
             querryResult: []
         }
@@ -53,122 +58,136 @@ export default {
         textSearch() {
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
-                console.log('searching...', this.inputName);
+                let button = document.getElementById("foundResults");
                 getFoodNames(this.inputName)
                 .then(result => {
                     this.querryResult = result;
-                    // this.inputName = result[0].description;
-                    console.log(this.querryResult)
+                    if (button.classList.contains('btn-secondary')) {
+                        button.classList.remove('btn-secondary')
+                    }
+                    button.classList.add('btn-success')
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    console.log(err);
+                    if (button.classList.contains('btn-secondary')) {
+                        button.classList.remove('btn-secondary')
+                    }
+                    if(button.classList.contains('btn-success')) {
+                        button.classList.remove('btn-success')
+                    }
+                    button.classList.add('btn-danger')
+                    setTimeout(() => {
+                        if(button.classList.contains('btn-danger')) {
+                            button.classList.remove('btn-danger')
+                        }
+                        button.classList.add('btn-secondary');
+                    }, 3000)
+                });
             }, 2500)
         },
         excelExport() {
             console.log("excel export...")
+        },
+        countSummary() {
+            this.cookForDays ? 
+                this.$emit('count-summary', this.cookForDays) : document.getElementById('numberOfDaysInput').focus();
         }
     }
 }
 </script>
 <template>
     <p class="h3 p-2">Új étel felvétele</p>
-
+    
     <div class="container">
 
-        <div class="row">
-            <div class="col-9">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text border-top" id="inputGroup-sizing-lg">Név</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputName" @keyup="textSearch($event)" placeholder="Összetevő">
+        <div class="row mt-2">
+            <div class="col-10">
+                
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Név</span>
+                    <input type="text" class="form-control" placeholder="Összetevő" aria-label="Összetevő" aria-describedby="addon-wrapping" v-model="inputName" @keyup="textSearch($event)" >
                 </div>
+                
             </div>
-            <div class="col-3">
-
-                <!-- Example single danger button -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        Action
+            <div class="col-2 text-end">
+                
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="foundResults" data-bs-toggle="dropdown" aria-expanded="false">
+                        Találatok
                     </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                </ul>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li v-for="(elem, index) in querryResult.slice(0, 20)" :key="index">
+                            <a class="dropdown-item" href="#">{{ elem.description }}</a>
+                        </li>
+                    </ul>
                 </div>
 
             </div>
         </div>
-        <div class="row">
+
+        <div class="row mt-2">
             <div class="col">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg">Fehérje</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputProtein" placeholder="0 gramm">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg">Szénhidrát</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputCarb" placeholder="0 gramm">
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg">Zsír</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputFat" placeholder="0 gramm">
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg">Kalória</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputCalorie" placeholder="0 gramm">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Fehérje</span>
+                    <input type="text" class="form-control" aria-label="Fehérje" aria-describedby="addon-wrapping" v-model="inputProtein" placeholder="0 gramm" >
                 </div>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mt-2">
             <div class="col">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg">Mennyiség</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" v-model="inputQuantity" placeholder="100 gramm">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Szénhidrát</span>
+                    <input type="text" class="form-control" aria-label="Szénhidrát" aria-describedby="addon-wrapping" v-model="inputCarb" placeholder="0 gramm" >
                 </div>
             </div>
         </div>
         
-        <div class="row">
-            <div class="col-9 float-left">
-                <button type="button" class="btn btn-primary btn-lg" @click="$event => addItem($event)">Hozzáadaás a listához</button>
+        <div class="row mt-2">
+            <div class="col">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Zsír</span>
+                    <input type="text" class="form-control" aria-label="Zsír" aria-describedby="addon-wrapping" v-model="inputFat" placeholder="0 gramm" >
+                </div>
             </div>
-            <div class="col-3 float-right">
-                <button type="button" class="btn btn-success btn-lg" @click="$event => excelExport($event)">Excel export</button>
+        </div>
+        
+        <div class="row mt-2">
+            <div class="col">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Kalória</span>
+                    <input type="text" class="form-control" aria-label="Kalória" aria-describedby="addon-wrapping" v-model="inputCalorie" placeholder="0 Kcal" >
+                </div>
             </div>
-
+        </div>
+        
+        <div class="row mt-2">
+            <div class="col">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Mennyiség</span>
+                    <input type="text" class="form-control" aria-label="Mennyiség" aria-describedby="addon-wrapping" v-model="inputQuantity" placeholder="100 gramm">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-9 text-start">
+                <button type="button" class="btn btn-primary btn-md" @click="$event => addItem($event)">Hozzáadaás</button>
+            </div>
+            <div class="col-3 text-end">
+                <button type="button" class="btn btn-success btn-md" @click="$event => excelExport($event)">Excel export</button>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-10">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Hány napra főznél?</span>
+                    <input id="numberOfDaysInput" type="text" class="form-control" aria-label="Mennyiség" aria-describedby="addon-wrapping" v-model="cookForDays" placeholder="5 nap">
+                </div>
+            </div>
+            <div class="col-2 text-end">
+                <button type="button" class="btn btn-secondary btn-md" @click="$event => countSummary($event)">Összesítő</button>
+            </div>
         </div>
     </div>
 </template>
-
-<style scoped>
-    .row {
-        margin-top: 5px;
-    }
-</style>
