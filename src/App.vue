@@ -42,6 +42,7 @@ import ShoppingList from './components/ShoppingList.vue';
         v-if="number_of_days > 0"
         :items="items"
         :number_of_days="number_of_days"
+        @hide-myself="hideShoppingList"
       />
     </div>
   </div>
@@ -92,6 +93,9 @@ export default {
     },
     countSummary(days) {
       this.number_of_days = days
+    },
+    hideShoppingList() {
+      this.number_of_days = 0;
     }
   },
 }
