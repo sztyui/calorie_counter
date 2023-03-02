@@ -1,25 +1,36 @@
 <script>
 import axios from 'axios';
-const URL = 'https://api.nal.usda.gov/fdc/v1/foods/list'
 
-const getFoodNames = async (searchstring) => {
-    var result = [];
-    const options = {
-        method: 'GET',
-        url: URL,
-        params: { 'api_key': 'DEMO_KEY'},
-        headers: {
-            "Content-Type": "application/json"
-        },
-        data: JSON.stringify({
-            query: "vibrátoros pörgő kutyaszar"
-            // query: searchstring
-        }),
+async function getFoodData(searchTerm) {
+    var data = JSON.stringify({
+      "query": searchTerm
+    });
+
+    var config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://api.nal.usda.gov/fdc/v1/foods/list?api_key=A6DieygpirYbBBDSIWNufVhvBkn0fzC1aQyT3JoT' ,
+      headers: { 
+        'Content-Type': 'application/json', 
+      },
+      data : data
+    };
+    
+    return axios(config);
+}
+
+function handleResult(data) {
+    function getNutrient(list, nutrient) {
+        return list.filter( elem => elem.name.toLowerCase().includes(nutrient.toLowerCase()))
     }
-    await axios.request(options)
-    .then(res=>console.log(result = res.data))
-    .catch(err=>console.log(err))
-    return result
+
+    return {
+        name: data.description,
+        calorie: getNutrient(data.foodNutrients, 'energy'),
+        fat: getNutrient(data.foodNutrients, 'total lipid (fat)'),
+        protein: getNutrient(data.foodNutrients, 'protein'),
+        carb: getNutrient(data.foodNutrients, 'carbohydrate'),
+    }
 }
 
 export default {
@@ -59,9 +70,9 @@ export default {
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
                 let button = document.getElementById("foundResults");
-                getFoodNames(this.inputName)
+                getFoodData(this.inputName)
                 .then(result => {
-                    this.querryResult = result;
+                    this.querryResult = result.data;
                     if (button.classList.contains('btn-secondary')) {
                         button.classList.remove('btn-secondary')
                     }
@@ -91,6 +102,16 @@ export default {
         countSummary() {
             this.cookForDays ? 
                 this.$emit('count-summary', this.cookForDays) : document.getElementById('numberOfDaysInput').focus();
+        },
+        chooseFood(index) {
+           console.log(`choosing food: ${index}: ${this.querryResult[index]}`)
+           let details = handleResult(this.querryResult[index])
+           console.log(details)
+           this.inputName = details.name
+           this.inputCalorie = details.calorie[0].amount
+           this.inputProtein = details.protein[0].amount
+           this.inputCarb = details.carb[0].amount
+           this.inputFat = details.fat[0].amount
         }
     }
 }
@@ -117,7 +138,7 @@ export default {
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li v-for="(elem, index) in querryResult.slice(0, 20)" :key="index">
-                            <a class="dropdown-item" href="#">{{ elem.description }}</a>
+                            <a class="dropdown-item" href="#" @click="chooseFood(index)">{{ elem.description }}</a>
                         </li>
                     </ul>
                 </div>
