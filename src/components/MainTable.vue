@@ -15,7 +15,7 @@ export default {
 </script>
 
 <template>
-    <table class="table .table-dark">
+    <table class="table .table-dark" v-if="items.length != 0">
             <thead>
                 <tr>
                     <td class="header" v-for="(column, index) in columns" :key="index">{{column}}</td>

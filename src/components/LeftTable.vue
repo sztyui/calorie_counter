@@ -25,10 +25,13 @@ export default {
     },
     methods: {
         sumByProp(prop) {
-            if(this.items.length == 0) return;
+            if(this.items.length === 0) return 0;
             return this.items.reduce((a, b) => a + (parseFloat(b[prop])/100 * b['quantity']), 0).toFixed(2);
         },
         propByBodyWeight(prop) {
+            if(this.items.length === 0) {
+                return 0
+            }
             return (this.sumByProp(prop) / this.bodyWeight).toFixed(2);
         },
     }

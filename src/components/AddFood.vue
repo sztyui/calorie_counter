@@ -34,7 +34,7 @@ function handleResult(data) {
 }
 
 export default {
-    emits: ["set-item-event", "count-summary"],
+    emits: ["set-item-event", "count-summary", "export-excel"],
     data(){
         return {
             inputName: "", 
@@ -58,8 +58,11 @@ export default {
                 "calorie": this.inputCalorie,
                 "quantity":  this.inputQuantity !== 0 ? this.inputQuantity : 100,
             };
-            console.log(`adding: ${JSON.stringify(newLine)}`)
-            this.$emit('set-item-event', newLine)
+            if ( this.inputName && this.inputCalorie ){
+                this.$emit('set-item-event', newLine)
+            } else {
+                document.getElementById('inputNameText').focus()
+            }
             this.inputName = null
             this.inputProtein = null
             this.inputCarb = null
@@ -97,7 +100,7 @@ export default {
             }, 2500)
         },
         excelExport() {
-            console.log("excel export...")
+            this.$emit("export-excel")
         },
         countSummary() {
             this.cookForDays ? 
@@ -132,7 +135,7 @@ export default {
                 
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">Név</span>
-                    <input type="text" class="form-control" placeholder="Összetevő" aria-label="Összetevő" aria-describedby="addon-wrapping" v-model="inputName" @keyup="textSearch($event)" >
+                    <input type="text" id="inputNameText" class="form-control" placeholder="Összetevő" aria-label="Összetevő" aria-describedby="addon-wrapping" v-model="inputName" @keyup="textSearch($event)" >
                 </div>
                 
             </div>
