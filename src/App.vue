@@ -91,7 +91,6 @@ export default {
       this.renderLeftTableKey += 1;
     },
     countSummary(days) {
-      console.log(`counting summary for ${days}`)
       this.number_of_days = days
     }
   },
