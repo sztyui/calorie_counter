@@ -1,5 +1,4 @@
 <script>
-
 import axios from 'axios';
 const URL = 'https://api.nal.usda.gov/fdc/v1/foods/list'
 
@@ -27,7 +26,8 @@ export default {
     emits: ["set-item-event"],
     data(){
         return {
-            inputName: "", inputProtein: "", inputCarb: "", inputFat: "", inputCalorie: "", inputQuantity: "",
+            inputName: "", inputProtein: "", inputCarb: "", inputFat: "", inputCalorie: "", inputQuantity: "", 
+            cookForDays: "",
             timer: undefined,
             querryResult: []
         }
@@ -57,7 +57,6 @@ export default {
                 getFoodNames(this.inputName)
                 .then(result => {
                     this.querryResult = result;
-                    // this.inputName = result[0].description;
                     console.log(this.querryResult)
                 })
                 .catch(err => console.log(err));
@@ -65,6 +64,9 @@ export default {
         },
         excelExport() {
             console.log("excel export...")
+        },
+        countSummary() {
+            this.$emit('count-summary', this.cookForDays)
         }
     }
 }
@@ -75,7 +77,7 @@ export default {
     <div class="container">
         
         <div class="row mt-2">
-            <div class="col-9">
+            <div class="col-10">
                 
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">Név</span>
@@ -83,10 +85,11 @@ export default {
                 </div>
                 
             </div>
-            <div class="col-3">
+            <div class="col-2 text-end">
+                
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Találatok webről
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="collapse" aria-expanded="true">
+                        Találatok
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Action</a></li>
@@ -94,6 +97,7 @@ export default {
                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
                 </div>
+
             </div>
         </div>
 
@@ -143,11 +147,22 @@ export default {
         </div>
         
         <div class="row mt-4">
-            <div class="col-9 float-left">
-                <button type="button" class="btn btn-primary btn-lg" @click="$event => addItem($event)">Hozzáadaás a listához</button>
+            <div class="col-9 text-start">
+                <button type="button" class="btn btn-primary btn-md" @click="$event => addItem($event)">Hozzáadaás</button>
             </div>
-            <div class="col-3 float-right">
-                <button type="button" class="btn btn-success btn-lg" @click="$event => excelExport($event)">Excel export</button>
+            <div class="col-3 text-end">
+                <button type="button" class="btn btn-success btn-md" @click="$event => excelExport($event)">Excel export</button>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-10">
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">Hány napra főznél?</span>
+                    <input type="text" class="form-control" aria-label="Mennyiség" aria-describedby="addon-wrapping" :value="cookForDays" placeholder="5 nap">
+                </div>
+            </div>
+            <div class="col-2 text-end">
+                <button type="button" class="btn btn-secondary btn-md" @click="$event => countSummary($event)">Összesítő</button>
             </div>
         </div>
     </div>

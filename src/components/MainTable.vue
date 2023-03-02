@@ -7,7 +7,6 @@ export default {
             this.$emit('delete-item', index)
         },
         changeQuantity(index, event) {
-            console.log(index, parseInt(event.target.value))
             this.$emit('change-quantity', index, event.target.value)
         }
     },
@@ -15,7 +14,7 @@ export default {
 </script>
 
 <template>
-    <table class="table .table-dark">
+    <table class="table .table-dark" v-if="items.length !== 0">
             <thead>
                 <tr>
                     <td class="header" v-for="(column, index) in columns" :key="index">{{column}}</td>

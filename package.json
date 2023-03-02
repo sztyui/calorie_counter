@@ -16,8 +16,9 @@
     "@popperjs/core": "^2.11.6",
     "axios": "^1.3.4",
     "bootstrap-vue": "^2.23.1",
+    "execa": "latest",
     "vue": "^3.2.47",
-    "execa": "latest"
+    "vue3-popper": "^1.5.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",

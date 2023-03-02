@@ -6,10 +6,10 @@ import ProteinGif from './components/ProteinGif.vue';
 </script>
 
 <template>
-  <div class="custom-container">
+  <div class="m-4">
     <div class="row">
       <div class="col-lg-12">
-        <h1 class="text-center">{{message}}</h1>
+        <h1 class="m-4 text-center">{{message}}</h1>
       </div>
     </div>
     <div class="row">
@@ -20,11 +20,10 @@ import ProteinGif from './components/ProteinGif.vue';
       </div>
       <div class="col-lg-5">
         <div class="row">
-          <AddFoodVue @set-item-event="setItem" />
-          <ProteinGif />
+          <AddFoodVue @set-item-event="setItem" @count-summary="countSUmmary"/>
         </div>
         <div class="row">
-
+          <ProteinGif />
         </div>
       </div>
     </div>
@@ -81,6 +80,9 @@ export default {
     forceRenderLeftTable() {
       console.log("rerendering page");
       this.renderLeftTableKey += 1;
+    },
+    countSUmmary(days) {
+      console.log(`TODO: count summary ${days} for days`)
     }
   },
 }
