@@ -3,6 +3,7 @@ import AddFoodVue from './components/AddFood.vue'
 import LeftTable from './components/LeftTable.vue'
 import MainTable from './components/MainTable.vue'
 import ProteinGif from './components/ProteinGif.vue';
+import ShoppingList from './components/ShoppingList.vue';
 </script>
 
 <template>
@@ -20,7 +21,7 @@ import ProteinGif from './components/ProteinGif.vue';
       </div>
       <div class="col-lg-5">
         <div class="row">
-          <AddFoodVue @set-item-event="setItem" @count-summary="countSUmmary"/>
+          <AddFoodVue @set-item-event="setItem" @count-summary="countSummary"/>
         </div>
         <div class="row">
           <ProteinGif />
@@ -35,6 +36,13 @@ import ProteinGif from './components/ProteinGif.vue';
         :items=items 
         :columns=columns />
       </div>
+    </div>
+    <div class="row mt-2">
+      <ShoppingList 
+        v-if="number_of_days > 0"
+        :items="items"
+        :number_of_days="number_of_days"
+      />
     </div>
   </div>
 </template>
@@ -56,7 +64,8 @@ export default {
         "calorie": 143,
         "quantity": 100,
       }],
-      inputName: "", inputProtein: "", inputCarb: "", inputFat: "", inputCalorie: ""
+      inputName: "", inputProtein: "", inputCarb: "", inputFat: "", inputCalorie: "",
+      number_of_days: 0,
     }
   },
   methods: {
@@ -81,8 +90,9 @@ export default {
       console.log("rerendering page");
       this.renderLeftTableKey += 1;
     },
-    countSUmmary(days) {
-      console.log(`TODO: count summary ${days} for days`)
+    countSummary(days) {
+      console.log(`counting summary for ${days}`)
+      this.number_of_days = days
     }
   },
 }

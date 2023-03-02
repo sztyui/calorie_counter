@@ -23,8 +23,6 @@ export default {
     computed: {
         shoppingList() {
             return this.items.map(item => {
-                console.log(item)
-                console.log(this.number_of_days)
                 return {name: item.name, quantity: item.quantity * this.number_of_days}
             })
         }

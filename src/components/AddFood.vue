@@ -23,11 +23,16 @@ const getFoodNames = async (searchstring) => {
 }
 
 export default {
-    emits: ["set-item-event"],
+    emits: ["set-item-event", "count-summary"],
     data(){
         return {
-            inputName: "", inputProtein: "", inputCarb: "", inputFat: "", inputCalorie: "", inputQuantity: "", 
-            cookForDays: "",
+            inputName: "", 
+            inputProtein: "", 
+            inputCarb: "", 
+            inputFat: "", 
+            inputCalorie: "", 
+            inputQuantity: "", 
+            cookForDays: 0,
             timer: undefined,
             querryResult: []
         }
@@ -66,6 +71,7 @@ export default {
             console.log("excel export...")
         },
         countSummary() {
+            console.log(this.cookForDays)
             this.$emit('count-summary', this.cookForDays)
         }
     }
@@ -158,7 +164,7 @@ export default {
             <div class="col-10">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">Hány napra főznél?</span>
-                    <input type="text" class="form-control" aria-label="Mennyiség" aria-describedby="addon-wrapping" :value="cookForDays" placeholder="5 nap">
+                    <input type="text" class="form-control" aria-label="Mennyiség" aria-describedby="addon-wrapping" v-model="cookForDays" placeholder="5 nap">
                 </div>
             </div>
             <div class="col-2 text-end">
