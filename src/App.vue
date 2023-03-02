@@ -18,8 +18,12 @@ import * as XLSX from 'xlsx/xlsx.mjs'
     <div class="row">
       <div class="col-lg-7">
         <LeftTable 
-          :key="renderLeftTableKey"  
-          :items=items />
+          :key="renderLeftTableKey"
+          :items=items 
+          v-model:bodyweight="bodyWeight"
+          v-model:dailykcal="dailyKcal"
+          @update-body-data="genderUpdate"
+          />
       </div>
       <div class="col-lg-5">
         <div class="row">
@@ -56,10 +60,10 @@ export default {
   data(){
     return {
       renderLeftTableKey: 0,
-      bodyWeight: 67,
-      dailyKcal: 2000,
       columns: ["Név", "Fehérje", "Szénhidrát", "Zsír", "Kalória", "Mennyiség", "Össz fehérje", "Össz szénhidrát", "Össz zsír", "Össz kalória"],
       items: [],
+      bodyWeight: 67,
+      dailyKcal: 2000,
       inputName: "", inputProtein: "", inputCarb: "", inputFat: "", inputCalorie: "",
       number_of_days: 0,
     }
@@ -127,6 +131,24 @@ export default {
 
 
       XLSX.writeFile(workbook, `${d}_etrend.xlsx`)
+    },
+    genderUpdate(gender) {
+      switch (gender) {
+        case 0:
+          this.bodyWeight = 67
+          this.dailyKcal = 2000
+          break;
+        case 1:
+          this.bodyWeight = 80
+          this.dailyKcal = 2500
+          break;
+        case 2:
+          this.bodyWeight = 75
+          this.dailyKcal = 2250
+          break;
+        default:
+          break;
+      }
     }
   },
 }

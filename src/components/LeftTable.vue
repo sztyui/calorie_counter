@@ -1,17 +1,20 @@
 
 <script>
 export default {
-    props: ['items'],
+    props: {
+        items: [],
+        bodyweight: String(),
+        dailykcal: String(),
+    },
+    emits: ['update-body-data'],
     data(){
         return {
-            bodyWeight: 67,
-            dailyKcal: 2000,
-            inputName: "", inputProtein: "", inputCarb: "", inputFat: "", inputCalorie: ""
+            inputName: "", inputProtein: "", inputCarb: "", inputFat: "", inputCalorie: "",
         }
     },
     computed: {
         weightLossKcal() {
-            return this.dailyKcal * 0.8
+            return this.dailykcal * 0.8
         },
         sum_calorie() {
             if(this.items.length == 0) {
@@ -20,7 +23,7 @@ export default {
             return this.items.reduce((a, b) => a + (parseFloat(b.calorie / 100) * b.quantity), 0);
         },
         calRemaining() {
-            return (this.dailyKcal * 0.8 - this.sum_calorie).toFixed(2);
+            return (this.dailykcal * 0.8 - this.sum_calorie).toFixed(2);
         },
     },
     methods: {
@@ -32,27 +35,54 @@ export default {
             if(this.items.length === 0) {
                 return 0
             }
-            return (this.sumByProp(prop) / this.bodyWeight).toFixed(2);
+            return (this.sumByProp(prop) / this.bodyweight).toFixed(2);
         },
+        updateBodyWeight(event) {
+            this.$emit('update:bodyweight', event.target.value);
+        },
+        updateCalorie(event){
+            this.$emit('update:dailykcal', event.target.value);
+        },
+        updateBodyData(event){
+            this.$emit('update-body-data', parseInt(event.target.value))
+            document.getElementById('bodyWeightInput').focus()
+            document.getElementById('dailyKcalInput').focus()
+        }
     }
 }
 </script>
 
 <template>
-    <p class="h3 p-2">Alapadatok</p>
+    <div class="row">
+        <div class="col-4"><p class="h3 p-2">Alapadatok</p></div>
+        <div class="col-8 mt-3">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0" checked v-on:change="updateBodyData">
+                <label class="form-check-label" for="inlineRadio1">Nő</label>
+                </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1" v-on:change="updateBodyData">
+                <label class="form-check-label" for="inlineRadio2">Férfi</label>
+                </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="2" v-on:change="updateBodyData">
+                <label class="form-check-label" for="inlineRadio3">LMBTQ+ 🌈</label>
+            </div>
+        </div>
+    </div>
     
     <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Testsúly: </span>
         </div>
-        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" v-model="bodyWeight">
+        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="bodyWeightInput" :value="bodyweight" @input="updateBodyWeight">
     </div>
 
     <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Napi ajánlott kalória bevitel: </span>
         </div>
-        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" v-model="dailyKcal" placeholder="{{dailyKcal}}">
+        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" :value="dailykcal" placeholder="2000 Kcal" @input="updateCalorie" id="dailyKcalInput">
     </div>
 
     <div class="input-group input-group-sm mb-3">
