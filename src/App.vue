@@ -64,6 +64,8 @@ import * as XLSX from 'xlsx/xlsx.mjs'
 <script>
 import { VueCookieNext } from 'https://unpkg.com/vue-cookie-next@1.0.0/dist/vue-cookie-next.esm-bundler.js'
 
+const COOKIEITEMNAME = 'supercaloriewebappitems'
+
 export default {
   data(){
     return {
@@ -78,13 +80,12 @@ export default {
   },
   mounted() {
     this.$cookie = VueCookieNext;
-    if(VueCookieNext.IsCookieAvailable('items')) {
+    if(VueCookieNext.IsCookieAvailable(COOKIEITEMNAME)) {
       try {
-        console.log('cookie loaded in')
-        this.items = JSON.parse(this.$cookie.getCookie('items'))
+        this.items = JSON.parse(this.$cookie.getCookie(COOKIEITEMNAME))
       } catch(err) {
         console.log(err)
-        this.$cookie.removeCookie('items')
+        this.$cookie.removeCookie(COOKIEITEMNAME)
       }
     }
   },
@@ -148,8 +149,6 @@ export default {
         XLSX.utils.sheet_add_aoa(ws2, [['Alapanyag', 'Mennyiség']], {origin: 'A1'})
         XLSX.utils.book_append_sheet(workbook, ws2, 'Bevásárlólista')
       }
-
-
       XLSX.writeFile(workbook, `${d}_etrend.xlsx`)
     },
     genderUpdate(gender) {
@@ -172,12 +171,11 @@ export default {
     },
     saveToCookie() {
       this.deleteCookie()
-      this.$cookie.setCookie('items', JSON.stringify(this.items))
-      console.log('saved into cookie')
+      this.$cookie.setCookie(COOKIEITEMNAME, JSON.stringify(this.items))
     },
     deleteCookie() {
-      if(this.$cookie.IsCookieAvailable('items')){
-        this.$cookie.removeCookie('items', JSON.stringify(this.items))
+      if(this.$cookie.IsCookieAvailable(COOKIEITEMNAME)){
+        this.$cookie.removeCookie(COOKIEITEMNAME, JSON.stringify(this.items))
       } 
     }
   },
