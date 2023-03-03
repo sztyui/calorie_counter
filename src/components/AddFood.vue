@@ -54,6 +54,7 @@ export default {
             timer: undefined,
             querryResult: [],
             summaryTimer: undefined,
+            showSumPopper: false, showExcelExportPopper: false,
         }
     },
     methods: {
@@ -103,16 +104,23 @@ export default {
             }, 2500)
         },
         excelExport() {
-            this.$emit("export-excel")
+            if(this.itemsSize > 0) {
+                this.$emit("export-excel")
+            } else {
+                this.showExcelExportPopper = true
+                setTimeout(()=>this.showExcelExportPopper = false, 2500)
+            }
         },
         countSummary() {
             try {
                 parseInt(this.cookForDays)
-                clearTimeout(this.summaryTimer)
-                this.summaryTimer = setTimeout(() => {
-                    this.cookForDays ? 
-                        this.$emit('count-summary', this.cookForDays) : document.getElementById('numberOfDaysInput').focus();    
-                }, 1000);   
+                if(this.cookForDays) {
+                    this.$emit('count-summary', this.cookForDays)
+                } else {
+                    this.showSumPopper = true
+                    document.getElementById('numberOfDaysInput').focus()
+                    setTimeout(()=>this.showSumPopper = false, 2500)
+                }
             } catch(err) {
                 console.log(err)
                 document.getElementById('numberOfDaysInput').focus();
@@ -140,9 +148,7 @@ export default {
 </script>
 <template>
     <p class="h3 p-2">Új étel felvétele</p>
-    
     <div class="container">
-
         <div class="row mt-2">
             <div class="col-10">
                 
@@ -150,7 +156,6 @@ export default {
                     <span class="input-group-text" id="addon-wrapping">Név</span>
                     <input type="text" id="inputNameText" class="form-control" placeholder="Összetevő" aria-label="Összetevő" aria-describedby="addon-wrapping" v-model="inputName" @keyup="textSearch($event)" >
                 </div>
-                
             </div>
             <div class="col-2 text-end">
                 <div class="dropdown">
@@ -165,7 +170,6 @@ export default {
                 </div>
             </div>
         </div>
-
         <div class="row mt-2">
             <div class="col">
                 <div class="input-group flex-nowrap">
@@ -174,7 +178,6 @@ export default {
                 </div>
             </div>
         </div>
-
         <div class="row mt-2">
             <div class="col">
                 <div class="input-group flex-nowrap">
@@ -183,7 +186,6 @@ export default {
                 </div>
             </div>
         </div>
-        
         <div class="row mt-2">
             <div class="col">
                 <div class="input-group flex-nowrap">
@@ -192,7 +194,6 @@ export default {
                 </div>
             </div>
         </div>
-        
         <div class="row mt-2">
             <div class="col">
                 <div class="input-group flex-nowrap">
@@ -201,7 +202,6 @@ export default {
                 </div>
             </div>
         </div>
-        
         <div class="row mt-2">
             <div class="col">
                 <div class="input-group flex-nowrap">
@@ -210,33 +210,33 @@ export default {
                 </div>
             </div>
         </div>
-        
         <div class="row mt-4">
             <div class="col-9 text-start">
                 <button type="button" class="btn btn-primary btn-md" @click="$event => addItem($event)">
                     <i class="bi bi-bag-plus-fill"></i> Hozzáadaás</button>
             </div>
             <div class="col-3 text-end">
-                <button type="button" class="btn btn-success btn-md" @click="$event => excelExport($event)">
-                    <i class="bi bi-file-earmark-spreadsheet"></i> Excel export</button>
+                <Popper content="Nincs mit exportálni 🍿" :show="showExcelExportPopper">
+                    <button type="button" class="btn btn-success btn-md" @click="$event => excelExport($event)">
+                        <i class="bi bi-file-earmark-spreadsheet"></i> Excel export</button>
+                </Popper>
             </div>
         </div>
         <div class="row mt-4">
             <div class="col-10">
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">Hány napra főznél?</span>
-                    <input id="numberOfDaysInput" type="text" class="form-control" aria-label="Mennyiség" aria-describedby="addon-wrapping" v-model="cookForDays" placeholder="5 nap" @keyup="$event => countSummary($event)">
+                    <input id="numberOfDaysInput" type="text" class="form-control" aria-label="Mennyiség" aria-describedby="addon-wrapping" v-model="cookForDays" placeholder="5 nap">
                 </div>
             </div>
             <div class="col-2 text-end">
-                <Popper content="Nincs mit exportálni 🍿" v-if="itemsSize.length !== 0">
+                <Popper content="Add meg a napok számát 🗓️" :show="showSumPopper">
                     <button type="button" class="btn btn-secondary btn-md" @click="$event => countSummary($event)">
                         <i class="bi bi-person-lines-fill"></i> Összesítő</button>
                 </Popper>
             </div>
         </div>
     </div>
-
 </template>
 
 <style>
