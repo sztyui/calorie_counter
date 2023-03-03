@@ -69,6 +69,7 @@ export default {
             this.inputCarb = null
             this.inputFat = null
             this.inputCalorie = null
+            this.inputQuantity = null
         },
         textSearch() {
             let button = document.getElementById("foundResults");

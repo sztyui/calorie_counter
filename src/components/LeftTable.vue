@@ -2,7 +2,7 @@
 <script>
 export default {
     props: {
-        items: [],
+        items: Array,
         bodyweight: String(),
         dailykcal: String(),
     },
@@ -46,7 +46,6 @@ export default {
         updateBodyData(event){
             this.$emit('update-body-data', parseInt(event.target.value))
             document.getElementById('bodyWeightInput').focus()
-            document.getElementById('dailyKcalInput').focus()
         }
     }
 }
