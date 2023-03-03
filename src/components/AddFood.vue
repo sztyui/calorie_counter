@@ -41,7 +41,7 @@ export default {
     props: {
         itemsSize: Number
     },
-    emits: ["set-item-event", "count-summary", "export-excel"],
+    emits: ["set-item-event", "count-summary", "export-excel", "save-to-cookie", "delete-cookie"],
     data(){
         return {
             inputName: "", 
@@ -142,6 +142,14 @@ export default {
                 button.classList.remove('btn-success')
                 button.classList.add('btn-secondary')
             }, 4000)
+        },
+        saveToCookie() {
+            if(this.itemsSize > 0){
+                this.$emit('save-to-cookie')
+            }
+        },
+        deleteCookie() {
+            this.$emit('delete-cookie')
         }
     }
 }
@@ -212,9 +220,14 @@ export default {
         </div>
         <div class="row mt-4">
             <div class="col-9 text-start">
-                <button type="button" class="btn btn-primary btn-md" @click="$event => addItem($event)">
+                <button type="button" class="btn btn-primary btn-md me-2" @click="$event => addItem($event)">
                     <i class="bi bi-bag-plus-fill"></i> Hozzáadaás</button>
+                <button type="button" class="btn btn-primary btn-md me-2" @click="$event => saveToCookie($event)">
+                    <i class="bi bi-cloud-download-fill"></i> Mentés cookieba 🍆</button>
+                <button type="button" class="btn btn-primary btn-md me-2" @click="$event => deleteCookie($event)">
+                    <i class="bi bi-eraser-fill"></i> Cookiek törlése 🧴</button>
             </div>
+
             <div class="col-3 text-end">
                 <Popper content="Nincs mit exportálni 🍿" :show="showExcelExportPopper">
                     <button type="button" class="btn btn-success btn-md" @click="$event => excelExport($event)">

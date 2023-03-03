@@ -31,6 +31,8 @@ import * as XLSX from 'xlsx/xlsx.mjs'
             @set-item-event="setItem" 
             @count-summary="countSummary" 
             @export-excel="toExcel"
+            @save-to-cookie="saveToCookie"
+            @delete-cookie="deleteCookie"
             v-model:itemsSize="items.length"/>
         </div>
         <div class="row">
@@ -60,6 +62,8 @@ import * as XLSX from 'xlsx/xlsx.mjs'
 </template>
 
 <script>
+import { VueCookieNext } from 'https://unpkg.com/vue-cookie-next@1.0.0/dist/vue-cookie-next.esm-bundler.js'
+
 export default {
   data(){
     return {
@@ -70,6 +74,18 @@ export default {
       dailyKcal: 2000,
       inputName: "", inputProtein: "", inputCarb: "", inputFat: "", inputCalorie: "",
       number_of_days: 0,
+    }
+  },
+  mounted() {
+    this.$cookie = VueCookieNext;
+    if(VueCookieNext.IsCookieAvailable('items')) {
+      try {
+        console.log('cookie loaded in')
+        this.items = JSON.parse(this.$cookie.getCookie('items'))
+      } catch(err) {
+        console.log(err)
+        this.$cookie.removeCookie('items')
+      }
     }
   },
   methods: {
@@ -153,6 +169,16 @@ export default {
         default:
           break;
       }
+    },
+    saveToCookie() {
+      this.deleteCookie()
+      this.$cookie.setCookie('items', JSON.stringify(this.items))
+      console.log('saved into cookie')
+    },
+    deleteCookie() {
+      if(this.$cookie.IsCookieAvailable('items')){
+        this.$cookie.removeCookie('items', JSON.stringify(this.items))
+      } 
     }
   },
 }
