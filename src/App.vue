@@ -27,7 +27,11 @@ import * as XLSX from 'xlsx/xlsx.mjs'
       </div>
       <div class="col-lg-5">
         <div class="row">
-          <AddFoodVue @set-item-event="setItem" @count-summary="countSummary" @export-excel="toExcel"/>
+          <AddFoodVue 
+            @set-item-event="setItem" 
+            @count-summary="countSummary" 
+            @export-excel="toExcel"
+            v-model:itemsSize="items.length"/>
         </div>
         <div class="row">
           <ProteinGif />
