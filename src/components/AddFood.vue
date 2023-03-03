@@ -77,27 +77,21 @@ export default {
             this.timer = setTimeout(() => {
                 getFoodData(this.inputName)
                 .then(result => {
-                    this.querryResult = result.data;
-                    if (button.classList.contains('btn-secondary')) {
+                    this.querryResult = result.data.length > 0 ? result.data : []
+                    if(this.querryResult.length === 0) {
+                        button.classList.replace('btn-secondary', 'btn-danger')
+                    } else {
+                        button.classList.remove('btn-danger')
                         button.classList.remove('btn-secondary')
+                        button.classList.add('btn-success')
                     }
-                    button.classList.add('btn-success')
                 })
                 .catch(err => {
                     console.log(err);
-                    if (button.classList.contains('btn-secondary')) {
-                        button.classList.remove('btn-secondary')
-                    }
-                    if(button.classList.contains('btn-success')) {
-                        button.classList.remove('btn-success')
-                    }
+                    button.classList.remove('btn-secondary')
+                    button.classList.remove('btn-success')
                     button.classList.add('btn-danger')
-                    setTimeout(() => {
-                        if(button.classList.contains('btn-danger')) {
-                            button.classList.remove('btn-danger')
-                        }
-                        button.classList.add('btn-secondary');
-                    }, 3000)
+                    setTimeout(() => button.classList.replace('btn-danger','btn-secondary'), 3000)
                 });
             }, 2500)
         },
@@ -126,12 +120,13 @@ export default {
            this.inputFat = details.fat[0].amount
         },
         buttonClick() {
-            let button = document.getElementById("foundResults");
-            if (button.classList.contains('btn-success')) {
+            setTimeout(() => {
+                let button = document.getElementById("foundResults");
+                button.classList.remove('btn-secondary')
+                button.classList.remove('btn-danger')
                 button.classList.remove('btn-success')
-            }
-            button.classList.remove('btn-secondary') 
-            button.classList.add('btn-secondary')
+                button.classList.add('btn-secondary')
+            }, 4000)
         }
     }
 }
@@ -151,18 +146,16 @@ export default {
                 
             </div>
             <div class="col-2 text-end">
-                
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="foundResults" data-bs-toggle="dropdown" aria-expanded="false" @click="buttonClick">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="foundResults" data-bs-toggle="dropdown" aria-expanded="false" @click="buttonClick" :disabled="querryResult.length === 0">
                         <i class="bi bi-egg-fried"></i> Találatok
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li v-for="(elem, index) in querryResult.slice(0, 20)" :key="index">
+                        <li  v-for="(elem, index) in querryResult.slice(0, 20)" :key="index">
                             <a class="dropdown-item" href="#" @click="chooseFood(index)">{{ elem.description }}</a>
                         </li>
                     </ul>
                 </div>
-
             </div>
         </div>
 
