@@ -154,7 +154,7 @@ export default {
                 
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="foundResults" data-bs-toggle="dropdown" aria-expanded="false" @click="buttonClick">
-                        Találatok
+                        <i class="bi bi-egg-fried"></i> Találatok
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li v-for="(elem, index) in querryResult.slice(0, 20)" :key="index">
@@ -213,10 +213,12 @@ export default {
         
         <div class="row mt-4">
             <div class="col-9 text-start">
-                <button type="button" class="btn btn-primary btn-md" @click="$event => addItem($event)">Hozzáadaás</button>
+                <button type="button" class="btn btn-primary btn-md" @click="$event => addItem($event)">
+                    <i class="bi bi-bag-plus-fill"></i> Hozzáadaás</button>
             </div>
             <div class="col-3 text-end">
-                <button type="button" class="btn btn-success btn-md" @click="$event => excelExport($event)">Excel export</button>
+                <button type="button" class="btn btn-success btn-md" @click="$event => excelExport($event)">
+                    <i class="bi bi-file-earmark-spreadsheet"></i> Excel export</button>
             </div>
         </div>
         <div class="row mt-4">
@@ -227,7 +229,8 @@ export default {
                 </div>
             </div>
             <div class="col-2 text-end">
-                <button type="button" class="btn btn-secondary btn-md" @click="$event => countSummary($event)">Összesítő</button>
+                <button type="button" class="btn btn-secondary btn-md" @click="$event => countSummary($event)">
+                    <i class="bi bi-person-lines-fill"></i> Összesítő</button>
             </div>
         </div>
     </div>
