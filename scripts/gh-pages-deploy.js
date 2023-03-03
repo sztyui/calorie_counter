@@ -4,8 +4,7 @@ import process from 'process';
 
 (async () => {
   try {
-    const { stdout } = await execa("git", ["diff", "--exit-code"])
-    if( stdout != "True") throw Error("there are changes to commit in this branch!")
+    await execa("git", ["diff", "--exit-code"])
     await execa("git", ["checkout", "--orphan", "gh-pages"]);
     console.log("Building...");
     await execa("npm", ["run", "build"]);
