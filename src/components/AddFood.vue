@@ -3,35 +3,26 @@ import axios from 'axios';
 import Popper from "vue3-popper";
 
 async function getFoodData(searchTerm) {
-    var data = JSON.stringify({
-      "query": searchTerm
-    });
+  var data = '';
 
-    var config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: 'https://api.nal.usda.gov/fdc/v1/foods/list?api_key=A6DieygpirYbBBDSIWNufVhvBkn0fzC1aQyT3JoT' ,
-      headers: { 
-        'Content-Type': 'application/json', 
-      },
-      data : data
-    };
-    
-    return axios(config);
+  var config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: `http://127.0.0.1:5000/kaloriabazis?q=${encodeURIComponent(searchTerm)}`,
+    data : data
+  };
+
+  return axios(config)
 }
 
 function handleResult(data) {
-    function getNutrient(list, nutrient) {
-        return list.filter( elem => elem.name.toLowerCase().includes(nutrient.toLowerCase()))
-    }
-
     return {
-        name: data.description,
-        calorie: getNutrient(data.foodNutrients, 'energy'),
-        fat: getNutrient(data.foodNutrients, 'total lipid (fat)'),
-        protein: getNutrient(data.foodNutrients, 'protein'),
-        carb: getNutrient(data.foodNutrients, 'carbohydrate'),
-    }
+    name: data.name,
+    calorie: data.cal.replace(' kcal', ''),
+    fat: data.fat,
+    protein: data.protein,
+    carb: data.carbo,
+  }  
 }
 
 export default {
@@ -84,8 +75,8 @@ export default {
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
                 getFoodData(this.inputName)
-                .then(result => {
-                    this.querryResult = result.data.length > 0 ? result.data : []
+                    .then(result => {
+                    this.querryResult = result.data['results2'].length > 0 ? result.data['results2'] : []
                     if(this.querryResult.length === 0) {
                         button.classList.replace('btn-secondary', 'btn-danger')
                     } else {
@@ -129,10 +120,10 @@ export default {
         chooseFood(index) {
            let details = handleResult(this.querryResult[index])
            this.inputName = details.name
-           this.inputCalorie = details.calorie[0].amount
-           this.inputProtein = details.protein[0].amount
-           this.inputCarb = details.carb[0].amount
-           this.inputFat = details.fat[0].amount
+           this.inputCalorie = details.calorie
+           this.inputProtein = details.protein
+           this.inputCarb = details.carb
+           this.inputFat = details.fat
         },
         buttonClick() {
             setTimeout(() => {
@@ -172,7 +163,7 @@ export default {
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li  v-for="(elem, index) in querryResult.slice(0, 20)" :key="index">
-                            <a class="dropdown-item" href="#" @click="chooseFood(index)">{{ elem.description }}</a>
+                            <a class="dropdown-item" href="#" @click="chooseFood(index)">{{ elem.name.replace('<b>', '').replace('</b>', '') }}</a>
                         </li>
                     </ul>
                 </div>
