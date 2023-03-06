@@ -17,12 +17,13 @@ async function getFoodDataUSA(searchTerm) {
         data: data
     };
 
-    return axios(config);
+    let result = await axios(config)
+    return result.data.map((elem) => { let a = elem; a.name = a.description; return a; })
 }
 
 function handleResultUSA(data) {
     function getNutrient(list, nutrient) {
-        return list.filter(elem => elem.name.toLowerCase().includes(nutrient.toLowerCase()))
+        return list.filter(elem => elem.name.toLowerCase().includes(nutrient.toLowerCase()))[0].amount
     }
 
     return {
@@ -44,7 +45,8 @@ async function getFoodData(searchTerm) {
         data: data
     };
 
-    return axios(config)
+    let result = await axios(config)
+    return result.data['results2'];
 }
 
 function handleResult(data) {
@@ -56,6 +58,18 @@ function handleResult(data) {
         carb: data.carbo,
     }
 }
+
+const national = {
+    get: getFoodDataUSA,
+    handle: handleResultUSA
+}
+
+const kaloria = {
+    get: getFoodData,
+    handle: handleResult
+}
+
+let apisource = kaloria
 
 export default {
     components: {
@@ -78,6 +92,7 @@ export default {
             querryResult: [],
             summaryTimer: undefined,
             showSumPopper: false, showExcelExportPopper: false,
+            apiSource: "caloriecounter"
         }
     },
     methods: {
@@ -106,9 +121,9 @@ export default {
             let button = document.getElementById("foundResults");
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
-                getFoodData(this.inputName)
+                apisource.get(this.inputName)
                     .then(result => {
-                        this.querryResult = result.data['results2'].length > 0 ? result.data['results2'] : []
+                        this.querryResult = result.length > 0 ? result : []
                         if (this.querryResult.length === 0) {
                             button.classList.replace('btn-secondary', 'btn-danger')
                         } else {
@@ -116,14 +131,13 @@ export default {
                             button.classList.remove('btn-secondary')
                             button.classList.add('btn-success')
                         }
-                    })
-                    .catch(err => {
+                    }).catch(err => {
                         console.log(err);
                         button.classList.remove('btn-secondary')
                         button.classList.remove('btn-success')
                         button.classList.add('btn-danger')
                         setTimeout(() => button.classList.replace('btn-danger', 'btn-secondary'), 3000)
-                    });
+                    })
             }, 2500)
         },
         excelExport() {
@@ -150,12 +164,13 @@ export default {
             }
         },
         chooseFood(index) {
-            let details = handleResult(this.querryResult[index])
+            let details = apisource.handle(this.querryResult[index])
             this.inputName = details.name
             this.inputCalorie = details.calorie
             this.inputProtein = details.protein
             this.inputCarb = details.carb
             this.inputFat = details.fat
+
         },
         buttonClick() {
             setTimeout(() => {
@@ -173,12 +188,48 @@ export default {
         },
         deleteCookie() {
             this.$emit('delete-cookie')
+        },
+        modifyDataHandler(event) {
+            console.log(event.target.value)
+            this.apiSource = event.target.value;
+            switch (event.target.value) {
+                case 'agro':
+                    apisource = national;
+                    break;
+                case 'caloriecounter':
+                    apisource = kaloria;
+                    break;
+                default:
+                    apisource = national;
+                    break;
+            }
         }
     }
 }
 </script>
 <template>
-    <p class="h3 p-2">Új étel felvétele</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-5">
+                <p class="h3 p-2">Új étel felvétele</p>
+            </div>
+            <div class="col-7 mt-3">
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="agro"
+                        v-on:change="modifyDataHandler">
+                    <label class="form-check-label" for="inlineRadio1"> Nat. Agricultural Library</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-inpu" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                        value="caloriecounter" v-on:change="modifyDataHandler" checked>
+                    <label class="form-check-label" for="inlineRadio2"> Kalóriaszámláló</label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row mt-2">
             <div class="col-10">
