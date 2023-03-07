@@ -60,11 +60,13 @@ function handleResult(data) {
 }
 
 const national = {
+    id: 0,
     get: getFoodDataUSA,
     handle: handleResultUSA
 }
 
 const kaloria = {
+    id: 1,
     get: getFoodData,
     handle: handleResult
 }
@@ -76,7 +78,7 @@ export default {
         Popper,
     },
     props: {
-        itemsSize: Number
+        itemsSize: Number,
     },
     emits: ["set-item-event", "count-summary", "export-excel", "save-to-cookie", "delete-cookie"],
     data() {
@@ -92,7 +94,8 @@ export default {
             querryResult: [],
             summaryTimer: undefined,
             showSumPopper: false, showExcelExportPopper: false,
-            apiSource: "caloriecounter"
+            apiSourceName: "Kalóriaszámláló",
+            apiSourceType: kaloria
         }
     },
     methods: {
@@ -189,41 +192,39 @@ export default {
         deleteCookie() {
             this.$emit('delete-cookie')
         },
-        modifyDataHandler(event) {
-            console.log(event.target.value)
-            this.apiSource = event.target.value;
-            switch (event.target.value) {
-                case 'agro':
+    },
+    computed: {
+        apiSourceComputed: {
+            get() {
+                return this.apiSourceType.id == 1;
+            },
+            set() {
+                if (this.apiSourceType.id == 1) {
+                    this.apiSourceType = national
                     apisource = national;
-                    break;
-                case 'caloriecounter':
+                } else {
+                    this.apiSourceType = kaloria
                     apisource = kaloria;
-                    break;
-                default:
-                    apisource = national;
-                    break;
-            }
+                }
+            },
         }
-    }
+    },
 }
 </script>
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-5">
+            <div class="col-7">
                 <p class="h3 p-2">Új étel felvétele</p>
             </div>
-            <div class="col-7 mt-3">
+            <div class="col-5 mt-3">
 
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="agro"
-                        v-on:change="modifyDataHandler">
-                    <label class="form-check-label" for="inlineRadio1"> Nat. Agricultural Library</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-inpu" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                        value="caloriecounter" v-on:change="modifyDataHandler" checked>
-                    <label class="form-check-label" for="inlineRadio2"> Kalóriaszámláló</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" v-model="apiSourceComputed" checked>
+                    <label class="form-check-label" for="flexSwitchCheckChecked" >Adatforrás: 
+                        <div v-if="apiSourceType.id == 1" style="display: inline-block;">Kalóriaszámláló</div>
+                        <div v-else style="display: inline-block;">Nat. Agricultural Library</div>
+                    </label>
                 </div>
 
             </div>

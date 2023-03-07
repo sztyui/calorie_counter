@@ -56,15 +56,15 @@ export default {
         <div class="col-4"><p class="h3 p-2">Alapadatok</p></div>
         <div class="col-8 mt-3">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0" checked v-on:change="updateBodyData">
+                <input class="form-check-input" type="radio" name="genderRadioButton" id="inlineRadio1" value="0" checked v-on:change="updateBodyData">
                 <label class="form-check-label" for="inlineRadio1">Nő 🙋‍♀️</label>
                 </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1" v-on:change="updateBodyData">
+                <input class="form-check-input" type="radio" name="genderRadioButton" id="inlineRadio2" value="1" v-on:change="updateBodyData">
                 <label class="form-check-label" for="inlineRadio2">Férfi 💁‍♂️</label>
                 </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="2" v-on:change="updateBodyData">
+                <input class="form-check-input" type="radio" name="genderRadioButton" id="inlineRadio3" value="2" v-on:change="updateBodyData">
                 <label class="form-check-label" for="inlineRadio3">LMBTQ+ 🌈</label>
             </div>
         </div>
