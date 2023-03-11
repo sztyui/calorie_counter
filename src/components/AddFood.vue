@@ -41,7 +41,7 @@ async function getFoodData(searchTerm) {
     var config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `https://kaloriaszamlalo.herokuapp.com/query?q=${encodeURIComponent(searchTerm)}`,
+        url: `https://kaloriaszamlalo.herokuapp.com/kaloriabazis?q=${encodeURIComponent(searchTerm)}`,
         data: data
     };
 
