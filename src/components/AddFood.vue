@@ -41,7 +41,7 @@ async function getFoodData(searchTerm) {
     var config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `https://kaloriaszamlalo.herokuapp.com/kaloriabazis?q=${encodeURIComponent(searchTerm)}`,
+        url: `https://kaloriaszamlalo.azurewebsites.net/kaloriabazis?q=${encodeURIComponent(searchTerm)}`,
         data: data
     };
 
@@ -220,8 +220,9 @@ export default {
             <div class="col-5 mt-3">
 
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" v-model="apiSourceComputed" checked>
-                    <label class="form-check-label" for="flexSwitchCheckChecked" >Adatforrás: 
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                        v-model="apiSourceComputed" checked>
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Adatforrás:
                         <div v-if="apiSourceType.id == 1" style="display: inline-block;">Kalóriaszámláló</div>
                         <div v-else style="display: inline-block;">Nat. Agricultural Library</div>
                     </label>
