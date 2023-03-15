@@ -38,10 +38,11 @@ function handleResultUSA(data) {
 async function getFoodData(searchTerm) {
     var data = '';
 
+    const URL = `${import.meta.env.BACKEND}/kaloriabazis`
     var config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `https://kaloriaszamlalo.azurewebsites.net/kaloriabazis?q=${encodeURIComponent(searchTerm)}`,
+        url: `${URL}?q=${encodeURIComponent(searchTerm)}`,
         data: data
     };
 
@@ -95,7 +96,8 @@ export default {
             summaryTimer: undefined,
             showSumPopper: false, showExcelExportPopper: false,
             apiSourceName: "Kalóriaszámláló",
-            apiSourceType: kaloria
+            apiSourceType: kaloria,
+            backendAlive: false
         }
     },
     methods: {
@@ -209,6 +211,26 @@ export default {
             },
         }
     },
+    mounted() {
+        var config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `${import.meta.env.VITE_BACKEND}/alive`,
+            headers: {
+                "Accept": "application/json"
+            },
+            data: ''
+        };
+
+        axios(config)
+            .then((response) => {
+                this.backendAlive = response.data.alive
+            })
+            .catch(function (error) {
+                this.backendAlive = false
+                console.log(error)
+            });
+    }
 }
 </script>
 <template>
@@ -223,11 +245,14 @@ export default {
                     <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
                         v-model="apiSourceComputed" checked>
                     <label class="form-check-label" for="flexSwitchCheckChecked">Adatforrás:
-                        <div v-if="apiSourceType.id == 1" style="display: inline-block;">Kalóriaszámláló</div>
+                        <div v-if="apiSourceType.id == 1" style="display: inline-block;">
+                            Kalóriaszámláló
+                            <label v-if="backendAlive">✅</label>
+                            <label v-else>⛔️</label>
+                        </div>
                         <div v-else style="display: inline-block;">Nat. Agricultural Library</div>
                     </label>
                 </div>
-
             </div>
         </div>
     </div>
