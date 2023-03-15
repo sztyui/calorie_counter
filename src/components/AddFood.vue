@@ -38,7 +38,7 @@ function handleResultUSA(data) {
 async function getFoodData(searchTerm) {
     var data = '';
 
-    const URL = `${import.meta.env.BACKEND}/kaloriabazis`
+    const URL = `${import.meta.env.VITE_BACKEND}/kaloriabazis`
     var config = {
         method: 'get',
         maxBodyLength: Infinity,
