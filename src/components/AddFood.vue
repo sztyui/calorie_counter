@@ -224,6 +224,7 @@ export default {
 
         axios(config)
             .then((response) => {
+                console.log("backend alive")
                 this.backendAlive = response.data.alive
             })
             .catch(function (error) {
