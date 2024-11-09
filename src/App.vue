@@ -15,7 +15,7 @@ import ShoppingList from './components/ShoppingList.vue';
     </div>
     <div class="row">
       <div class="col-lg-7">
-        <LeftTable :key="renderLeftTableKey" :items=items v-model:bodyweight="bodyWeight" v-model:dailykcal="dailyKcal"
+        <LeftTable :key="renderLeftTableKey" :items=items v-model:bodyweight="bodyWeight" v-model:dailykcal="dailyKcal" v-model:height="height" v-model:age="age"
           @update-body-data="genderUpdate" />
       </div>
       <div class="col-lg-5">
@@ -53,8 +53,10 @@ export default {
       renderLeftTableKey: 0,
       columns: ["Név", "Fehérje", "Szénhidrát", "Zsír", "Kalória", "Mennyiség", "Össz fehérje", "Össz szénhidrát", "Össz zsír", "Össz kalória"],
       items: [],
-      bodyWeight: 67,
+      bodyWeight: 70,
       dailyKcal: 2000,
+      height: 162,
+      age: 32,
       inputName: "", inputProtein: "", inputCarb: "", inputFat: "", inputCalorie: "",
       number_of_days: 0,
     }
@@ -145,16 +147,22 @@ export default {
     genderUpdate(gender) {
       switch (gender) {
         case 0:
-          this.bodyWeight = 67
+          this.bodyWeight = 70
           this.dailyKcal = 2000
+          this.height = 162
+          this.age = 32
           break;
         case 1:
           this.bodyWeight = 80
           this.dailyKcal = 2500
+          this.height = 162
+          this.age = 32
           break;
         case 2:
           this.bodyWeight = 75
           this.dailyKcal = 2250
+          this.height = 162
+          this.age = 32
           break;
         default:
           break;
