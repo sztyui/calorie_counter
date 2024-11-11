@@ -19,6 +19,14 @@ export default {
                 carbs: {ratio: 0.4, value: 4},
                 fat: {ratio: 0.2, value: 9},
             },
+            activities: [
+                { id: 1, text: "Semmit (minimális vagy nulla edzés)", value: 1.15},
+                { id: 2, text: "Keveset (heti 1-3 óra edzés)", value: 1.2},
+                { id: 3, text: "Átlagos (heti 4-6 óra edzés)", value: 1.4},
+                { id: 4, text: "Több, mint átlagos (heti 7-9 óra edzés)", value: 1.6},
+                { id: 5, text: "Sokat 💪 (heti 10 óránál több edzés)", value: 1.8},
+            ],
+            activity: null,
         }
     },
     computed: {
@@ -26,7 +34,7 @@ export default {
             return ((this.bodyweight * 10 + this.height * 6.25) - 5 * this.age - 161 ) * this.goal.activityModifier
         },
         weightLossKcal() {
-            return this.dailykcal *this.goal.calorieModifier
+            return this.dailykcal * this.goal.calorieModifier
         },
         sum_calorie() {
             if(this.items.length == 0) {
@@ -35,7 +43,7 @@ export default {
             return this.items.reduce((a, b) => a + (parseFloat(b.calorie / 100) * b.quantity), 0);
         },
         calRemaining() {
-            return (this.dailykcal * 0.8 - this.sum_calorie).toFixed(2);
+            return this.dailykcal - this.sum_calorie;
         },
         sumProtein() {
             return ( this.weightLossKcal * this.goal.protein.ratio ) / this.goal.protein.value
@@ -99,6 +107,13 @@ export default {
                     break;
             }
         },
+        setSelectorActivity(){
+            let filtered = this.activities.filter( act => {
+                if(act.id == this.activity) return true
+            } )
+            this.goal.activityModifier = filtered[0].value
+            this.dailyKcal
+        },
         updateGoalValues(event) {
             switch (event.target.value) {
                 case "0":
@@ -131,7 +146,7 @@ export default {
                 default:
                     break;
             }
-        }
+        },
     }
 }
 </script>
@@ -177,8 +192,8 @@ export default {
     </div>
 
     <div class="row">
-        <div class="col-4"><p class="h5 p-2">Mi a célod?</p></div>
-        <div class="col-8 mt-3">
+        <div class="col-2"><p class="h5 p-2">Mi a célod?</p></div>
+        <div class="col-6 mt-3">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="goalRadioButton" id="goalRadio1" value="0" checked v-on:change="updateGoalValues">
                 <label class="form-check-label" for="goalRadio1">Fogyás 🤸‍♂️</label>
@@ -192,60 +207,15 @@ export default {
                 <label class="form-check-label" for="goalRadio3">Tömegnövelés 🍜</label>
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-4"><p class="h5 p-2">Mennyit mozogsz egy nap?</p></div>
-        <div class="col-8 mt-3">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="activityButton" id="activityRadio1" value="0" checked v-on:change="updateActivityValues">
-                <label class="form-check-label" for="activityRadio1">Semmit (minimális vagy nulla edzés)</label>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4"></div>
-        <div class="col-8 mt-3">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="activityButton" id="activityRadio2" value="1" v-on:change="updateActivityValues">
-                <label class="form-check-label" for="activityRadio2">Keveset (heti 1-3 óra edzés)</label>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4"></div>
-            <div class="col-8 mt-3">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="activityButton" id="activityRadio3" value="2" v-on:change="updateActivityValues">
-                <label class="form-check-label" for="activityRadio3">Átlagos (heti 4-6 óra edzés)</label>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4"></div>
-        <div class="col-8 mt-3">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="activityButton" id="activityRadio4" value="3" v-on:change="updateActivityValues">
-                <label class="form-check-label" for="activityRadio4">Több, mint átlagos (heti 7-9 óra edzés)</label>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4"></div>
-        <div class="col-8 mt-3">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="activityButton" id="activityRadio4" value="3" v-on:change="updateActivityValues">
-                <label class="form-check-label" for="activityRadio4">Több, mint átlagos (heti 7-9 óra edzés)</label>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4"></div>
-        <div class="col-8 mt-3">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="activityButton" id="activityRadio5" value="4" v-on:change="updateActivityValues">
-                <label class="form-check-label" for="activityRadio5">Sokat 💪 (heti 10 óránál több edzés)</label>
-            </div>
+        <div class="col-4">
+            <select class="form-select" aria-label="Mennyit mozogsz egy héten?" v-model="activity" @change="setSelectorActivity">
+                <option selected disabled>Mennyit mozogsz egy héten?</option>
+                <option v-for="activity in activities"
+                        :key="activity.id"
+                        :value="activity.id">
+                        {{ activity.text }}
+                </option>
+            </select>
         </div>
     </div>
 
@@ -254,7 +224,7 @@ export default {
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Napi alap kalória bevitel: </span>
         </div>
-        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" :value="dailykcal.toFixed(2)" placeholder="2000 Kcal" @input="updateCalorie" id="dailyKcalInput">
+        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" :value="dailykcal.toFixed(2)" placeholder="2000 Kcal" @input="updateCalorie" id="dailyKcalInput" readonly>
     </div>
 
     <div class="input-group input-group-sm mb-3">
@@ -285,21 +255,6 @@ export default {
         <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" :value="sumFat.toFixed(2)" readonly>
     </div>
 
-
-    <!-- div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-default">Fehérje testsúly-kilónként:</span>
-        </div>
-        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="1.5">
-    </div>
-
-    <  div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-default">Ajánlott szénhidrát kilónként:</span>
-        </div>
-        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="2">
-    </div>
-
     <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Összes kalória</span>
@@ -311,30 +266,8 @@ export default {
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Fennmaradó kalória</span>
         </div>
-        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" :value="calRemaining" readonly>
+        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" :value="calRemaining.toFixed(2)" readonly>
     </div>
-
-    
-    <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-default">Fehérje /tskg</span>
-        </div>
-        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" :value="propByBodyWeight('protein')" readonly>
-    </div>
-
-    <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-default">Szénhidrát /tskg</span>
-        </div>
-        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" :value="propByBodyWeight('carb')" readonly>
-    </div>
-
-    <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-default">Zsír /tskg</span>
-        </div>
-        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" :value="propByBodyWeight('fat')" readonly>
-    </-->
 </template>
 
 <style scoped>
